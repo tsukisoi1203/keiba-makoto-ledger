@@ -23,8 +23,9 @@ header{background:linear-gradient(180deg,var(--navy),var(--navy2));color:var(--p
 .note{font-size:12px;color:var(--muted);margin:14px 2px 0}
 .ledger{background:var(--paper);padding:20px 0 40px}
 .tabs{display:flex;gap:8px;margin:6px 0 14px;flex-wrap:wrap}
-.tab{font-size:13px;padding:6px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;color:#4a4636}
+.tab{font-size:13px;padding:6px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;color:#4a4636;cursor:pointer;user-select:none}
 .tab.on{background:var(--navy);color:var(--paper);border-color:var(--navy)}
+tr.hidden-by-filter{display:none!important}
 .tablewrap{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
 table{width:100%;border-collapse:collapse;font-size:13.5px}
 th{background:#f4efe2;text-align:left;padding:12px;font-weight:700;color:#5b5647;font-size:12px;border-bottom:1px solid var(--line);white-space:nowrap}
@@ -567,4 +568,22 @@ td:nth-child(8):before{content:"払戻"}
 <li>「儲かる」とは言わない。回収率も正直に出す</li></ul>
 <div class="disc">本ページで公開する予想は、透明性と検証可能性を示すための記録であり、的中・収益を保証するものではなく、投資助言でもありません。掲載の的中率・回収率は検証途上の参考値です。二十歳未満の方は馬券を購入できません。</div>
 <div class="upd">最終更新：サンプル ／ Keiba Makoto（誠）</div></div></footer>
+<script>
+(function(){
+  var FILTER_CLASS = {"すべて":null,"的中":"row-hit","不的中":"row-miss","集計中":"row-hold"};
+  var tabs = document.querySelectorAll(".tab");
+  var rows = document.querySelectorAll(".ledger tbody tr");
+  tabs.forEach(function(tab){
+    tab.addEventListener("click", function(){
+      tabs.forEach(function(t){ t.classList.remove("on"); });
+      tab.classList.add("on");
+      var want = FILTER_CLASS[tab.textContent.trim()];
+      rows.forEach(function(tr){
+        var show = !want || tr.classList.contains(want);
+        tr.classList.toggle("hidden-by-filter", !show);
+      });
+    });
+  });
+})();
+</script>
 </body></html>
